@@ -11,6 +11,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -19,7 +20,9 @@ import java.util.List;
  */
 public class UserRealm extends AuthenticatingRealm {
 
+    //TODO
     @Autowired
+    @Lazy
     UserService userService;
 
     @Override
