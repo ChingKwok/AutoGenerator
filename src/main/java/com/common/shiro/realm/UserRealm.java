@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class UserRealm extends AuthenticatingRealm {
 
-    //TODO
     @Autowired
     @Lazy
     UserService userService;

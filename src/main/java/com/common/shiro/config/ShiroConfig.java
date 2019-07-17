@@ -72,11 +72,15 @@ public class ShiroConfig {
         // 对静态资源设置匿名访问
         // anon:所有url都都可以匿名访问
         filterChainDefinitionMap.put("/swagger-ui.html/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/configuration/**", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         // 配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         // authc:所有url都必须认证通过才可以访问
-        filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

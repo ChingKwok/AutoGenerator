@@ -1,4 +1,4 @@
-package com.chingkwok;
+package com.common.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,7 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Boot中使用Swagger2构建RESTful APIs")
+                .title("代码自动生成")
                 .description("基于Springboot的代码自动生成")
                 .termsOfServiceUrl("#")
                 .contact("ChingKwok")
