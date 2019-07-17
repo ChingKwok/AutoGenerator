@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://${db_ip:134.175.6.168}:${db_port:3306}/${db_name:auto_generator}?useUnicode=true&characterEncoding=UTF-8
+    username: ${db_username:root}
+    password: ${db_password:a602b854-8218-4857-b22c-f733bcd52671}
+    driver-class-name: com.mysql.jdbc.Driver
+    test-on-return: false
+    test-on-borrow: false
+    test-while-idle: true
+    validation-query: SELECT 1
+    min-evictable-idle-time-millis: 60000
+    max-wait: 20000
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    pool-prepared-statements: true
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    time-between-eviction-runs-millis: 60000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
