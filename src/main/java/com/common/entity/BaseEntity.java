@@ -1,11 +1,14 @@
 package com.common.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by guojingye on 2019/7/17
  */
+@Data
 public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
