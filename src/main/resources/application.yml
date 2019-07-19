@@ -28,3 +28,7 @@ log:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
+snowflake:
+  workerId: 1000
+  datacenterId: 1000
+

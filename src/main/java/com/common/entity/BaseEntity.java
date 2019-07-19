@@ -18,6 +18,11 @@ public abstract class BaseEntity implements Serializable {
     private String creatorUserId;
 
     /**
+     * 创建用户名
+     */
+    private String creatorUserName;
+
+    /**
      * 创建时间
      */
     private Date creationTime;

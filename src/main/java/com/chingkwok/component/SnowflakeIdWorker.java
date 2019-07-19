@@ -1,5 +1,8 @@
-package com.common.utils;
+package com.chingkwok.component;
 
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Twitter_Snowflake<br>
@@ -13,6 +16,7 @@ package com.common.utils;
  * 加起来刚好64位，为一个Long型。<br>
  * SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，SnowFlake每秒能够产生26万ID左右。
  */
+@Component
 public class SnowflakeIdWorker {
 
     // ==============================Fields===========================================
@@ -47,9 +51,11 @@ public class SnowflakeIdWorker {
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
     /** 工作机器ID(0~31) */
+    @Value("${snowflake.workerId}")
     private long workerId;
 
     /** 数据中心ID(0~31) */
+    @Value("${snowflake.datacenterId}")
     private long datacenterId;
 
     /** 毫秒内序列(0~4095) */
@@ -73,6 +79,15 @@ public class SnowflakeIdWorker {
         }
         this.workerId = workerId;
         this.datacenterId = datacenterId;
+    }
+
+    public SnowflakeIdWorker(){
+        if (workerId > maxWorkerId || workerId < 0) {
+            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+        }
+        if (datacenterId > maxDatacenterId || datacenterId < 0) {
+            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
+        }
     }
 
     // ==============================Methods==========================================

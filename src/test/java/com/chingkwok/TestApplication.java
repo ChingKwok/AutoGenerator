@@ -1,6 +1,7 @@
 package com.chingkwok;
 
 import com.common.utils.GeneratorSqlmap;
+import com.chingkwok.component.SnowflakeIdWorker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,20 @@ public class TestApplication {
     @Autowired
     GeneratorSqlmap generatorSqlmap;
 
+    @Autowired
+    SnowflakeIdWorker snowflakeIdWorker;
+
+
     @Test
     public void doGenerator()throws Exception{
         generatorSqlmap.generator();
         System.out.println("1");
     }
+
+    @Test
+    public void snowflake(){
+        long l = snowflakeIdWorker.nextId();
+        System.out.println(l);
+    }
+
 }
