@@ -1,13 +1,15 @@
-package com.common.utils;
-
+package com.chingkwok.utils;
 
 import com.common.entity.Column;
 import com.common.entity.Table;
-import lombok.Data;
-
+import com.google.common.base.CaseFormat;
+import org.apache.commons.lang3.StringUtils;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DatabaseUtil {
@@ -88,6 +90,34 @@ public class DatabaseUtil {
 
     }
 
+    public static List<String> getPrimaryKey(String url, String username, String password, String table) {
+        try (
+                Connection conn = DriverManager.getConnection(url, username, password)
+        ) {
+            String sql = "SHOW CREATE TABLE " + table;
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            Pattern pattern = Pattern.compile("PRIMARY KEY \\(\\`(.*)\\`\\)");
+            Matcher matcher = null;
+            while (rs.next()) {
+                matcher = pattern.matcher(rs.getString(2));
+            }
+            matcher.find();
+            String data = matcher.group();
+            //过滤对于字符
+            data = data.replaceAll("\\`|PRIMARY KEY \\(|\\)", "");
+            //拆分字符
+            String[] stringArr = data.split(",");
+            return Arrays.asList(stringArr);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<String>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
+    }
+
     /**
      * 获取所有表
      *
@@ -96,23 +126,40 @@ public class DatabaseUtil {
     public static List<Table> getAllTable(String url, String username, String password) {
         try (Connection conn = DriverManager.getConnection(url, username, password)
         ) {
-            List<String> tableNames = getTableNames(url,username,password);
+            List<String> tableNames = getTableNames(url, username, password);
             List<Table> collect = tableNames.stream().map(v -> {
                 Table table = new Table();
+                table.setEntityName(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, v));
+                table.setAlias(getAlias(v));
                 ArrayList<Column> columns = new ArrayList<>();
                 table.setTableName(v);
-                List<String> columnComments = getColumnComments(url,username,password,v);
+                List<String> columnComments = getColumnComments(url, username, password, v);
+                List<String> primaryKey = getPrimaryKey(url, username, password, v);
                 String tableSql = SQL + v;
                 try {
                     PreparedStatement pStemt = conn.prepareStatement(tableSql);
                     ResultSetMetaData metaData = pStemt.getMetaData();
+                    DatabaseMetaData databaseMetaData = conn.getMetaData();
                     int count = metaData.getColumnCount();
                     for (int i = 0; i < count; i++) {
                         Column column = new Column();
+                        if (primaryKey.contains(metaData.getColumnName(i + 1))) {
+                            column.setIsPrimary(Boolean.TRUE);
+                        } else column.setIsPrimary(Boolean.FALSE);
                         column.setName(metaData.getColumnName(i + 1));
-                        column.setTypeName(metaData.getColumnTypeName(i + 1));
+                        if (metaData.getColumnTypeName(i + 1).equals("DATETIME")) {
+                            column.setTypeName("TIMESTAMP");
+                        } else {
+                            column.setTypeName(metaData.getColumnTypeName(i + 1));
+
+                        }
                         column.setTypeCode(metaData.getColumnType(i + 1));
                         column.setComment(columnComments.get(i));
+                        column.setProperty(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, metaData.getColumnName(i + 1)));
+                        //sqlType to JavaType
+                        column.setJavaType(SqlToJavaType.sqlTojavaHandle(column.getTypeCode()));
+                        //set EntityName
+                        System.out.println(column.getTypeCode() + " " + column.getTypeName());
                         columns.add(column);
                     }
                     table.setColumns(columns);
@@ -129,5 +176,23 @@ public class DatabaseUtil {
 
     }
 
-
+    /**
+     * 生成缩写
+     *
+     * @param tableName
+     * @return
+     */
+    public static String getAlias(String tableName) {
+        if (StringUtils.isBlank(tableName)) return "";
+        String[] strings = tableName.split("_");
+        if (strings.length == 1) {
+            return strings[0].substring(0, 1).toLowerCase();
+        } else {
+            String result = "";
+            for (int i = 1; i < strings.length; i++) {
+                result += strings[i].substring(0, 1);
+            }
+            return result.toLowerCase();
+        }
+    }
 }

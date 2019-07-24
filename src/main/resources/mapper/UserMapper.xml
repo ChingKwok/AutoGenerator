@@ -1,58 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.chingkwok.mapper.UserMapper">
   <resultMap id="BaseResultMap" type="com.chingkwok.bean.entity.User">
-    <id column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-    <result column="salt" jdbcType="VARCHAR" property="salt" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="last_modifier_user_id" jdbcType="BIGINT" property="lastModifierUserId" />
-    <result column="last_modification_time" jdbcType="TIMESTAMP" property="lastModificationTime" />
-    <result column="creator_user_name" jdbcType="VARCHAR" property="creatorUserName" />
-    <result column="creator_user_id" jdbcType="BIGINT" property="creatorUserId" />
-    <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime" />
-    <result column="deletion_time" jdbcType="TIMESTAMP" property="deletionTime" />
-    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
-    <result column="deleter_user_id" jdbcType="BIGINT" property="deleterUserId" />
+    <id column="user_id" jdbcType="BIGINT" property="userId"/>
+    <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+    <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="password" jdbcType="VARCHAR" property="password"/>
+    <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+    <result column="salt" jdbcType="VARCHAR" property="salt"/>
+    <result column="email" jdbcType="VARCHAR" property="email"/>
+    <result column="last_modifier_user_id" jdbcType="BIGINT" property="lastModifierUserId"/>
+    <result column="last_modification_time" jdbcType="TIMESTAMP" property="lastModificationTime"/>
+    <result column="creator_user_name" jdbcType="VARCHAR" property="creatorUserName"/>
+    <result column="creator_user_id" jdbcType="BIGINT" property="creatorUserId"/>
+    <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime"/>
+    <result column="deletion_time" jdbcType="TIMESTAMP" property="deletionTime"/>
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+    <result column="deleter_user_id" jdbcType="BIGINT" property="deleterUserId"/>
   </resultMap>
 
   <sql id="Base_Column_List">
-    user_id, nickname, username, password, mobile, salt, email, last_modifier_user_id, 
-    last_modification_time, creator_user_name, creator_user_id, creation_time, deletion_time, 
-    is_deleted, deleter_user_id
-  </sql>
-
-  <select id="selectByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
-    <include refid="BASE_SELECT_BY_MAP" />
-  </select>
+            u.user_id,
+            u.nickname,
+            u.username,
+            u.password,
+            u.mobile,
+            u.salt,
+            u.email,
+            u.last_modifier_user_id,
+            u.last_modification_time,
+            u.creator_user_name,
+            u.creator_user_id,
+            u.creation_time,
+            u.deletion_time,
+            u.is_deleted,
+            u.deleter_user_id
+    </sql>
 
   <sql id="BASE_SELECT_BY_MAP">
     select
-    <include refid="Base_Column_List" />
-    from user  p where p.is_deleted = 0
+    <include refid="Base_Column_List"/>
+    from user u where u.is_deleted = 0
     <if test="_parameter != null">
-      <include refid="ByMap_Where_Clause" />
+      <include refid="ByMap_Where_Clause"/>
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
     <if test="sortName != null">
-      <include refid="ByMap_OrderBy_Clause" />
+      <include refid="ByMap_OrderBy_Clause"/>
     </if>
   </sql>
 
-    <select id="selectByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
-        <include refid="BASE_SELECT_BY_MAP" />
-    </select>
+  <select id="selectByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <include refid="BASE_SELECT_BY_MAP"/>
+  </select>
+  <select id="selectOneByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+    <include refid="BASE_SELECT_BY_MAP"/>
+    limit 1
+  </select>
 
-    <select id="selectOneByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
-        <include refid="BASE_SELECT_BY_MAP" />
-        limit 1
-    </select>
+  <sql id="ByMap_Where_Clause">
+    <if test="eqUserId != null">
+      and u.user_id = #{eqUserId,jdbcType=BIGINT}}
+    </if>
+    <if test="likeNickname != null">
+      and u.nickname like CONCAT('%',#{likeNickname,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="likeUsername != null">
+      and u.username like CONCAT('%',#{likeUsername,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="likePassword != null">
+      and u.password like CONCAT('%',#{likePassword,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="likeMobile != null">
+      and u.mobile like CONCAT('%',#{likeMobile,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="likeSalt != null">
+      and u.salt like CONCAT('%',#{likeSalt,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="likeEmail != null">
+      and u.email like CONCAT('%',#{likeEmail,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="eqLastModifierUserId != null">
+      and u.last_modifier_user_id = #{eqLastModifierUserId,jdbcType=BIGINT}}
+    </if>
+    <if test="gtLastModificationTime != null">
+      and u.last_modification_time <![CDATA[ > ]]> #{gtLastModificationTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="ltLastModificationTime != null">
+      and u.last_modification_time <![CDATA[ < ]]>  #{ltLastModificationTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="likeCreatorUserName != null">
+      and u.creator_user_name like CONCAT('%',#{likeCreatorUserName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="eqCreatorUserId != null">
+      and u.creator_user_id = #{eqCreatorUserId,jdbcType=BIGINT}}
+    </if>
+    <if test="gtCreationTime != null">
+      and u.creation_time <![CDATA[ > ]]> #{gtCreationTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="ltCreationTime != null">
+      and u.creation_time <![CDATA[ < ]]>  #{ltCreationTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="gtDeletionTime != null">
+      and u.deletion_time <![CDATA[ > ]]> #{gtDeletionTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="ltDeletionTime != null">
+      and u.deletion_time <![CDATA[ < ]]>  #{ltDeletionTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="eqDeleterUserId != null">
+      and u.deleter_user_id = #{eqDeleterUserId,jdbcType=BIGINT}}
+    </if>
+  </sql>
 
-
-
+  <sql id="ByMap_OrderBy_Clause">
+    <trim prefix="order by ">
+      <if test="sortName == 'userId'">
+        u.user_id
+      </if>
+      <if test="sortName == 'nickname'">
+        u.nickname
+      </if>
+      <if test="sortName == 'username'">
+        u.username
+      </if>
+      <if test="sortName == 'password'">
+        u.password
+      </if>
+      <if test="sortName == 'mobile'">
+        u.mobile
+      </if>
+      <if test="sortName == 'salt'">
+        u.salt
+      </if>
+      <if test="sortName == 'email'">
+        u.email
+      </if>
+      <if test="sortName == 'lastModifierUserId'">
+        u.last_modifier_user_id
+      </if>
+      <if test="sortName == 'lastModificationTime'">
+        u.last_modification_time
+      </if>
+      <if test="sortName == 'creatorUserName'">
+        u.creator_user_name
+      </if>
+      <if test="sortName == 'creatorUserId'">
+        u.creator_user_id
+      </if>
+      <if test="sortName == 'creationTime'">
+        u.creation_time
+      </if>
+      <if test="sortName == 'deletionTime'">
+        u.deletion_time
+      </if>
+      <if test="sortName == 'isDeleted'">
+        u.is_deleted
+      </if>
+      <if test="sortName == 'deleterUserId'">
+        u.deleter_user_id
+      </if>
+      <if test="sortOrder == 'desc'">
+        desc
+      </if>
+      <if test="sortOrder == 'asc'">
+        asc
+      </if>
+    </trim>
+  </sql>
 </mapper>

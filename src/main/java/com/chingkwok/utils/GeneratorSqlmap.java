@@ -1,4 +1,4 @@
-package com.common.utils;
+package com.chingkwok.utils;
 
 
 import org.mybatis.generator.api.MyBatisGenerator;

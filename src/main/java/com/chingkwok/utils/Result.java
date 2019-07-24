@@ -1,6 +1,6 @@
-package com.common.utils;
+package com.chingkwok.utils;
 
-import com.common.utils.eum.ResultEnum;
+import com.chingkwok.utils.eum.ResultEnum;
 import lombok.Data;
 
 /**

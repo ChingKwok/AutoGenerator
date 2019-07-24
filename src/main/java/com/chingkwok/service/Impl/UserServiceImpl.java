@@ -31,17 +31,6 @@ public class UserServiceImpl extends BaseServerImpl<User> implements UserService
         return userMapper.selectByExample(userExample);
     }
 
-//    public int insert(User user) {
-//        user.setUserId(snowflakeIdWorker.nextId());
-//        user.setCreationTime(new Date());
-//        user.setDeleterUserId("");
-//        user.setDeletionTime(new Date(0));
-//        user.setIsDeleted(false);
-//        user.setCreatorUserId("");
-//        user.setLastModificationTime(new Date());
-//        user.setLastModifierUserId("");
-//        return userMapper.insert(user);
-//    }
 
     @Override
     public int update(User user) {

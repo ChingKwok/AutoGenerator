@@ -1,6 +1,6 @@
 package com.chingkwok;
 
-import com.common.utils.GeneratorSqlmap;
+import com.chingkwok.utils.GeneratorSqlmap;
 import com.chingkwok.component.SnowflakeIdWorker;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -28,6 +28,12 @@ log:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
 snowflake:
   workerId: 1000
   datacenterId: 1000

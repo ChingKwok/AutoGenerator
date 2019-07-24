@@ -1,10 +1,9 @@
 package com.common.service;
 
-import com.chingkwok.component.SnowflakeIdWorker;
+import com.chingkwok.utils.PagedResult;
 import com.common.component.KeySettable;
 import com.common.entity.BaseEntity;
 import com.common.entity.SearchBean;
-import com.common.utils.PagedResult;
 
 import java.util.List;
 import java.util.Map;

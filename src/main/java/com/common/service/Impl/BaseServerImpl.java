@@ -2,12 +2,19 @@ package com.common.service.Impl;
 
 import com.chingkwok.bean.entity.User;
 import com.chingkwok.component.SnowflakeIdWorker;
+import com.chingkwok.utils.ConvertUtils;
+import com.chingkwok.utils.PagedResult;
+import com.chingkwok.utils.ParseUtils;
+import com.chingkwok.utils.interfaceFun.PagedResultHandler;
 import com.common.component.KeySettable;
 import com.common.entity.SearchBean;
 import com.common.mapper.BaseMapper;
 import com.common.service.BaseService;
 import com.common.entity.BaseEntity;
-import com.common.utils.PagedResult;
+
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -111,13 +118,38 @@ public abstract class BaseServerImpl<T extends BaseEntity> implements BaseServic
     }
 
     @Override
-    public PagedResult<T> selectPageResult(Map<String, Object> var1) {
-        return null;
+    public PagedResult<T> selectPageResult(Map<String, Object> map) {
+        return selectPageResult(map, () -> mapper.selectByMap(map));
     }
 
     @Override
-    public PagedResult<T> selectPageResult(SearchBean var1) {
-        return null;
+    public PagedResult<T> selectPageResult(SearchBean searchBean) {
+        if (searchBean.getSearchAll() != null && searchBean.getSearchAll()) {
+            return selectAllPageResult(() -> this.mapper.selectByMap(ConvertUtils.convertMap(searchBean))
+            );
+        } else {
+            return selectPageResult(ConvertUtils.convertMap(searchBean));
+        }
+
+    }
+
+    protected <E> PagedResult<E> selectPageResult(Map<String, Object> map, PagedResultHandler<E> handler) {
+        PageHelper.startPage(getPageIndex(map), getPageSize(map));
+        List<E> tList = handler.handle();
+        return new PagedResult<>(tList, new PageInfo<>(tList).getTotal());
+    }
+
+    protected <E> PagedResult<E> selectAllPageResult(PagedResultHandler<E> handler) {
+        List<E> tList = handler.handle();
+        return new PagedResult<>(tList, (new PageInfo<>(tList)).getTotal());
+    }
+
+    protected int getPageIndex(Map<String, Object> map) {
+        return ParseUtils.parseInt(map.get("pageIndex"), 1);
+    }
+
+    protected int getPageSize(Map<String, Object> map) {
+        return ParseUtils.parseInt(map.get("pageSize"), 20);
     }
 
     @Override

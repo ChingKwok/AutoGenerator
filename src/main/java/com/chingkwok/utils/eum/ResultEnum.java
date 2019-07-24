@@ -1,4 +1,4 @@
-package com.common.utils.eum;
+package com.chingkwok.utils.eum;
 
 import lombok.Getter;
 

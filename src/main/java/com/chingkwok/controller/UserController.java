@@ -2,8 +2,9 @@ package com.chingkwok.controller;
 
 import com.chingkwok.bean.entity.User;
 import com.chingkwok.service.UserService;
-import com.common.utils.Result;
-import com.common.utils.eum.ResultEnum;
+
+import com.chingkwok.utils.Result;
+import com.chingkwok.utils.eum.ResultEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;

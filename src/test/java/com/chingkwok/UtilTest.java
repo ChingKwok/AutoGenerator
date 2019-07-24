@@ -1,12 +1,12 @@
 package com.chingkwok;
 
+
+import com.chingkwok.utils.DatabaseUtil;
 import com.common.entity.Table;
-import com.common.utils.DatabaseUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.List;
 
 /**
