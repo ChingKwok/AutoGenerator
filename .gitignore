@@ -29,3 +29,6 @@ HELP.md
 .vscode/
 
 /log.filePath_IS_UNDEFINED
+/targetFile
+/hs_*
+/replay_*

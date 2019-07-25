@@ -26,5 +26,25 @@ public class FileUtils {
         return file.delete();
     }
 
+    /**
+     * 创建文件夹
+     *
+     * @param path
+     * @return
+     */
+    public static boolean createFile(String path) {
+        try {
+            File file = new File(path);
+            File parentFile = new File(file.getParent());
+            while (!parentFile.exists()) {
+                createFile(parentFile.getCanonicalPath());
+            }
+            return file.mkdir();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
 }

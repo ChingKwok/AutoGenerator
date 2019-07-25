@@ -6,6 +6,7 @@ import com.chingkwok.exception.eum.AutoGeneratorExceptionEnum;
  * Created by guojingye on 2019/7/17
  */
 public class AutoGeneratorException extends RuntimeException {
+
     private int code;
 
     private String info;

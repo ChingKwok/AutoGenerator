@@ -9,7 +9,7 @@ import lombok.Getter;
 public enum JavaType {
     BOOLEAN("Boolean"),
     STRING("String"),
-    DECIMAL("Decimal"),
+    DECIMAL("BigDecimal"),
     INTEGER("Integer"),
     LONG("Long"),
     DOUBLE("Double"),

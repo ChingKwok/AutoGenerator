@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class DatabaseUtil {
 
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-
+    private static final String JDBC_PREFIX = "jdbc:mysql://";
     private static final String SQL = "SELECT * FROM ";// 数据库操作
 
     static {
@@ -194,5 +194,16 @@ public class DatabaseUtil {
             }
             return result.toLowerCase();
         }
+    }
+
+    /**
+     * 拼接jdbc连接url
+     * @param ip
+     * @param port
+     * @param database
+     * @return
+     */
+    public static String getJdbcUrl(String ip, String port, String database) {
+        return JDBC_PREFIX + ip + ":" + port + "/" + database;
     }
 }

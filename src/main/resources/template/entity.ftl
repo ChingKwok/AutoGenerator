@@ -1,7 +1,14 @@
-package ${project.packageName}.${project.projectCode}.bean.entity;
+package ${project.packageName}.bean.entity;
 
+<#list table.columns as column>
+    <#if (column.typeCode >= 91 ) && (column.typeCode <= 93 ) >
+import java.util.Date;
+    <#elseif column.typeCode == 3 >
+import java.math.BigDecimal;
+    </#if>
+</#list>
 import lombok.Data;
-import ${project.packageName}.${project.projectCode}.common.bean.BaseEntity;
+import ${project.packageName}.common.bean.BaseEntity;
 
 <#if (table.tableComment)?exists>
 /**

@@ -16,6 +16,7 @@ import com.common.entity.BaseEntity;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -34,10 +35,15 @@ public abstract class BaseServerImpl<T extends BaseEntity> implements BaseServic
     SnowflakeIdWorker snowflakeIdWorker;
 
     public int insert(T record) {
-        if (record != null) {
-            initInsertExtendData(record);
-            return this.mapper.insert(record);
-        } else {
+        try {
+            if (record != null) {
+                initInsertExtendData(record);
+                return this.mapper.insert(record);
+            } else {
+                return -1;
+            }
+        } catch (UnavailableSecurityManagerException e) {
+            e.printStackTrace();
             return -1;
         }
     }
@@ -192,9 +198,12 @@ public abstract class BaseServerImpl<T extends BaseEntity> implements BaseServic
         return null;
     }
 
+    private User getLoginUser() throws UnavailableSecurityManagerException {
+        return (User) SecurityUtils.getSubject().getPrincipal();
+    }
 
     private void initInsertExtendData(T record) {
-        User principal = (User) SecurityUtils.getSubject().getPrincipal();
+        User principal = getLoginUser();
         record.setCreationTime(new Date());
         record.setCreatorUserId(principal.getUserId().toString());
         record.setCreatorUserName(principal.getUsername());
@@ -203,13 +212,13 @@ public abstract class BaseServerImpl<T extends BaseEntity> implements BaseServic
     }
 
     private void initUpdateExtendData(T record) {
-        User principal = (User) SecurityUtils.getSubject().getPrincipal();
+        User principal = getLoginUser();
         record.setLastModificationTime(new Date());
         record.setLastModifierUserId(principal.getUserId().toString());
     }
 
     private void initDeleteExtendData(T record) {
-        User principal = (User) SecurityUtils.getSubject().getPrincipal();
+        User principal = getLoginUser();
         record.setDeleterUserId(principal.getUserId().toString());
         record.setDeletionTime(new Date());
     }

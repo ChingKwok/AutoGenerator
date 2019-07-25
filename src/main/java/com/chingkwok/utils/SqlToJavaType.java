@@ -10,12 +10,12 @@ public class SqlToJavaType {
 
     public static String sqlTojavaHandle(int sqlTypeCode){
         switch (sqlTypeCode){
-            case -7:
+            case -6:
             case -4:
             case -3:
             case -2:return JavaType.BOOLEAN.getName();
             case -5:return JavaType.LONG.getName();
-            case -6:return JavaType.BYTE.getName();
+            case -7:return JavaType.BYTE.getName();
             case 0:return "";
             case 1:
             case 2:
@@ -36,8 +36,8 @@ public class SqlToJavaType {
     }
 }
 
-//        -7	BIT
-//        -6	TINYINT
+//        -7	TINYINT
+//        -6	?
 //        -5	BIGINT
 //        -4	LONGVARBINARY
 //        -3	VARBINARY
