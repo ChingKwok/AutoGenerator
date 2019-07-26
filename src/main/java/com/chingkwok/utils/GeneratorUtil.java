@@ -2,7 +2,6 @@ package com.chingkwok.utils;
 
 
 import com.chingkwok.bean.entity.Project;
-import com.chingkwok.component.SnowflakeIdWorker;
 import com.chingkwok.exception.AutoGeneratorException;
 import com.chingkwok.exception.eum.AutoGeneratorExceptionEnum;
 import com.common.entity.Table;
@@ -10,12 +9,10 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
+import lombok.Data;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by guojingye on 2019/7/23
@@ -51,11 +48,31 @@ public class GeneratorUtil {
         entityTargetMap.put("mapper", SEPARATOR + "mapper" + SEPARATOR);
         entityTargetMap.put("service", SEPARATOR + "service" + SEPARATOR);
         entityTargetMap.put("serviceImpl", SEPARATOR + "service" + SEPARATOR + "Impl" + SEPARATOR);
-
+        entityTargetMap.put("controller", SEPARATOR + "controller" + SEPARATOR);
         //初始化骨架文件对应关系
         modalTargetMap = new HashMap<>();
-        modalTargetMap.put("controller", SEPARATOR + "controller" + SEPARATOR);
         modalTargetMap.put("common", SEPARATOR + "common" + SEPARATOR);
+    }
+
+
+    /**
+     * 初始化模板
+     *
+     * @param configuration
+     * @return
+     * @throws TemplateNotFoundException
+     * @throws IOException
+     */
+    private HashMap<String, Template> initTemplate(Configuration configuration) throws TemplateNotFoundException, IOException {
+        HashMap<String, Template> templateMap = new HashMap<>();
+        templateMap.put("mapper_xmlTemplate", configuration.getTemplate("mapper.ftl"));
+        templateMap.put("entityTemplate", configuration.getTemplate("entity.ftl"));
+        templateMap.put("searchDtoTemplate", configuration.getTemplate("searchDto.ftl"));
+        templateMap.put("deleteDtoTemplate", configuration.getTemplate("deleteDto.ftl"));
+        templateMap.put("voTemplate", configuration.getTemplate("vo.ftl"));
+        templateMap.put("serviceTemplate", configuration.getTemplate("service.ftl"));
+        templateMap.put("dtoTemplate", configuration.getTemplate("dto.ftl"));
+        return templateMap;
     }
 
     /**
@@ -87,18 +104,38 @@ public class GeneratorUtil {
                 dataMap.put("project", project);
 
                 File docFile = null;
+
+                ArrayList<TemplateEntity> templateEntities = new ArrayList<>();
+
                 //创建entity
                 String entityPath = currentFile.getCanonicalPath() + entityTargetMap.get("entity") + t.getEntityName() + ".java";
-                process(entityPath, templateMap.get("entityTemplate"), dataMap);
+                templateEntities.add(new TemplateEntity(entityPath, templateMap.get("entityTemplate")));
 
                 //创建mapper_xml
                 String mapperPath = currentFile.getCanonicalPath() + entityTargetMap.get("mapper_xml") + t.getEntityName() + ".xml";
-                process(mapperPath, templateMap.get("mapper_xmlTemplate"), dataMap);
+                templateEntities.add(new TemplateEntity(mapperPath, templateMap.get("mapper_xmlTemplate")));
 
                 //创建searchBean
                 String searchDtoPath = currentFile.getCanonicalPath() + entityTargetMap.get("dto") + t.getEntityName() + "SearchDTO.java";
-                process(searchDtoPath, templateMap.get("searchDtoTemplate"), dataMap);
+                templateEntities.add(new TemplateEntity(searchDtoPath, templateMap.get("searchDtoTemplate")));
 
+                //创建deleteBean
+                String deleteDtoPath = currentFile.getCanonicalPath() + entityTargetMap.get("dto") + t.getEntityName() + "DeleteDTO.java";
+                templateEntities.add(new TemplateEntity(deleteDtoPath, templateMap.get("deleteDtoTemplate")));
+
+                //创建vo
+                String voPath = currentFile.getCanonicalPath() + entityTargetMap.get("vo") + t.getEntityName() + "VO.java";
+                templateEntities.add(new TemplateEntity(voPath, templateMap.get("voTemplate")));
+
+                //创建service
+                String servicePath = currentFile.getCanonicalPath() + entityTargetMap.get("service") + t.getEntityName() + "Service.java";
+                templateEntities.add(new TemplateEntity(servicePath, templateMap.get("serviceTemplate")));
+
+                //创建dto
+                String dtoBeanPath = currentFile.getCanonicalPath()+entityTargetMap.get("dto")+t.getEntityName()+"DTO.java";
+                templateEntities.add(new TemplateEntity(dtoBeanPath,templateMap.get("dtoTemplate")));
+
+                processList(templateEntities, dataMap);
 
             }
         } catch (IOException e) {
@@ -107,6 +144,10 @@ public class GeneratorUtil {
             e.printStackTrace();
         }
 
+    }
+
+    private void processList(List<TemplateEntity> tes, Map dataMap) {
+        tes.stream().forEach(v -> process(v.getPath(), v.getTemplate(), dataMap));
     }
 
     /**
@@ -154,20 +195,16 @@ public class GeneratorUtil {
         return new File(currentTargetFile);
     }
 
-    /**
-     * 初始化模板
-     *
-     * @param configuration
-     * @return
-     * @throws TemplateNotFoundException
-     * @throws IOException
-     */
-    private HashMap<String, Template> initTemplate(Configuration configuration) throws TemplateNotFoundException, IOException {
-        HashMap<String, Template> templateMap = new HashMap<>();
-        templateMap.put("mapper_xmlTemplate", configuration.getTemplate("mapper.ftl"));
-        templateMap.put("entityTemplate", configuration.getTemplate("entity.ftl"));
-        templateMap.put("searchDtoTemplate", configuration.getTemplate("searchDto.ftl"));
-        return templateMap;
-    }
 
+}
+
+@Data
+class TemplateEntity {
+    private String path;
+    private Template template;
+
+    TemplateEntity(String path, Template template) {
+        this.path = path;
+        this.template = template;
+    }
 }

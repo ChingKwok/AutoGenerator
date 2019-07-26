@@ -16,8 +16,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Project project = new Project();
-        project.setPackageName("com.chingkwok");
-        project.setProjectCode("autogenerator");
+        project.setPackageName("com");
+        project.setProjectCode("chingkwok");
         project.setPort("3306");
         project.setDatasourceName("auto_generator");
         project.setUsername("root");

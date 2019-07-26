@@ -39,10 +39,14 @@ public class ConvertUtils {
         Map<?, ?> beanMap = BeanMap.create(source);
         Iterator<? extends Map.Entry<?, ?>> iterator = beanMap.entrySet().iterator();
 
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<?, ?> next = iterator.next();
-            map.put(next.getKey().toString(),next.getValue());
+            map.put(next.getKey().toString(), next.getValue());
         }
         return map;
     }
+
+//    public static <S, T> PagedResult<T> convertPagedResult(PagedResult<S> pagedResult, Class<T> tClass, FieldFunction<T> fieldFunction){
+//
+//    }
 }

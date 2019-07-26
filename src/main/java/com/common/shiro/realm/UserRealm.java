@@ -28,17 +28,17 @@ public class UserRealm extends AuthenticatingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException, AutoGeneratorException {
         //获取用户的输入的账号
         String username = (String) token.getPrincipal();
-        List<User> users = userService.searchUserByUserName(username);
-        if (users == null || users.size() == 0) {
-            throw new AutoGeneratorException(AutoGeneratorExceptionEnum.LOGIN_NOT_EXIST);
-        } else if (users.size() > 1) {
-            throw new AutoGeneratorException(AutoGeneratorExceptionEnum.USERNAME_REPEAT_ERROR);
-        }
-        User user = users.get(0);
-        String realmName = getName();
-        ByteSource credentialsSalt = ByteSource.Util.bytes(user.getSalt());
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(), credentialsSalt, realmName);
-        return simpleAuthenticationInfo;
+//        List<User> users = userService.searchUserByUserName(username);
+//        if (users == null || users.size() == 0) {
+//            throw new AutoGeneratorException(AutoGeneratorExceptionEnum.LOGIN_NOT_EXIST);
+//        } else if (users.size() > 1) {
+//            throw new AutoGeneratorException(AutoGeneratorExceptionEnum.USERNAME_REPEAT_ERROR);
+//        }
+//        User user = users.get(0);
+//        String realmName = getName();
+//        ByteSource credentialsSalt = ByteSource.Util.bytes(user.getSalt());
+//        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(), credentialsSalt, realmName);
+        return null;
     }
 
     public String getName() {

@@ -1,7 +1,7 @@
 package com.chingkwok.service;
 
 import com.chingkwok.bean.entity.User;
-import com.chingkwok.component.SnowflakeIdWorker;
+import com.chingkwok.utils.SnowflakeIdWorker;
 import com.chingkwok.mapper.UserMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

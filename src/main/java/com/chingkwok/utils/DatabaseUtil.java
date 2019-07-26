@@ -4,6 +4,7 @@ import com.common.entity.Column;
 import com.common.entity.Table;
 import com.google.common.base.CaseFormat;
 import org.apache.commons.lang3.StringUtils;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,10 +18,16 @@ public class DatabaseUtil {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String JDBC_PREFIX = "jdbc:mysql://";
     private static final String SQL = "SELECT * FROM ";// 数据库操作
+    private static List<String> BASE_COLUMN;
 
     static {
         try {
             Class.forName(DRIVER);
+            BASE_COLUMN = new ArrayList<>();
+            BASE_COLUMN.addAll(Arrays.asList("deleter_user_id", "is_deleted",
+                    "deletion_time", "creation_time",
+                    "creator_user_id", "creator_user_name",
+                    "last_modification_time", "last_modifier_user_id"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -90,6 +97,15 @@ public class DatabaseUtil {
 
     }
 
+    /**
+     * 获取主键
+     *
+     * @param url
+     * @param username
+     * @param password
+     * @param table
+     * @return
+     */
     public static List<String> getPrimaryKey(String url, String username, String password, String table) {
         try (
                 Connection conn = DriverManager.getConnection(url, username, password)
@@ -147,11 +163,16 @@ public class DatabaseUtil {
                             column.setIsPrimary(Boolean.TRUE);
                         } else column.setIsPrimary(Boolean.FALSE);
                         column.setName(metaData.getColumnName(i + 1));
+                        //DATETIME替换TIMESTAMP
                         if (metaData.getColumnTypeName(i + 1).equals("DATETIME")) {
                             column.setTypeName("TIMESTAMP");
                         } else {
                             column.setTypeName(metaData.getColumnTypeName(i + 1));
-
+                        }
+                        if (BASE_COLUMN.contains(column.getName())) {
+                            column.setIsBase(Boolean.TRUE);
+                        } else {
+                            column.setIsBase(Boolean.FALSE);
                         }
                         column.setTypeCode(metaData.getColumnType(i + 1));
                         column.setComment(columnComments.get(i));
@@ -159,9 +180,10 @@ public class DatabaseUtil {
                         //sqlType to JavaType
                         column.setJavaType(SqlToJavaType.sqlTojavaHandle(column.getTypeCode()));
                         //set EntityName
-                        System.out.println(column.getTypeCode() + " " + column.getTypeName());
                         columns.add(column);
                     }
+                    List<String> columnSet = columns.stream().map(c -> c.getJavaType()).distinct().collect(Collectors.toList());
+                    table.setColumnSet(columnSet);
                     table.setColumns(columns);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -198,6 +220,7 @@ public class DatabaseUtil {
 
     /**
      * 拼接jdbc连接url
+     *
      * @param ip
      * @param port
      * @param database

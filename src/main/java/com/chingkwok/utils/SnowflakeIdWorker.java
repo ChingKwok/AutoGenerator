@@ -1,4 +1,4 @@
-package com.chingkwok.component;
+package com.chingkwok.utils;
 
 
 import org.springframework.beans.factory.annotation.Value;

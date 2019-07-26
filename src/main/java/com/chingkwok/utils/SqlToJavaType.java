@@ -17,7 +17,6 @@ public class SqlToJavaType {
             case -5:return JavaType.LONG.getName();
             case -7:return JavaType.BYTE.getName();
             case 0:return "";
-            case 1:
             case 2:
             case 3:return JavaType.DECIMAL.getName();
             case 4:return JavaType.INTEGER.getName();
@@ -26,6 +25,7 @@ public class SqlToJavaType {
             case 7:return "";
             case 8:return JavaType.DOUBLE.getName();
             case -1:
+            case 1:
             case 12:return JavaType.STRING.getName();
             case 91:
             case 92:
@@ -37,7 +37,7 @@ public class SqlToJavaType {
 }
 
 //        -7	TINYINT
-//        -6	?
+//        -6	TINYINT
 //        -5	BIGINT
 //        -4	LONGVARBINARY
 //        -3	VARBINARY
@@ -47,7 +47,7 @@ public class SqlToJavaType {
 //        1	CHAR
 //        2	NUMERIC
 //        3	DECIMAL
-//        4	INTEGER
+//        4	INTEGER & INT
 //        5	SMALLINT
 //        6	FLOAT
 //        7	REAL
@@ -57,3 +57,23 @@ public class SqlToJavaType {
 //        92	TIME
 //        93	TIMESTAMP
 //        1111 	OTHER
+
+
+//4 INT
+//        -5 BIGINT
+//        -6 TINYINT
+//        7 FLOAT
+//        3 DECIMAL
+//        5 SMALLINT
+//        8 DOUBLE
+//        -2 BINARY
+//        -7 BIT
+//        -4 BLOB
+//        1 CHAR
+//        91 DATE
+//        3 DECIMAL
+//        3 DECIMAL
+//        4 INT
+//        -1 VARCHAR
+//        12 VARCHAR
+//        92 TIME

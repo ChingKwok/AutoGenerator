@@ -1,8 +1,8 @@
 ${"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"}
 ${"<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">"}
 
-<mapper namespace="${project.packageName}.mapper.${table.tableName}Mapper">
-    <resultMap id="BaseResultMap" type="${project.packageName}.bean.entity.${table.entityName}">
+<mapper namespace="${project.packageName}.${project.projectCode}.mapper.${table.tableName}Mapper">
+    <resultMap id="BaseResultMap" type="${project.packageName}.${project.projectCode}.bean.entity.${table.entityName}">
         <#list table.columns as column>
             <#if (column.isPrimary)>
                 <id column="${column.name}" jdbcType="${column.typeName}" property="${column.property}"/>

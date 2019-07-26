@@ -1,7 +1,7 @@
 package com.common.service;
 
 import com.chingkwok.utils.PagedResult;
-import com.common.component.KeySettable;
+import com.chingkwok.utils.interfaceFun.KeySettable;
 import com.common.entity.BaseEntity;
 import com.common.entity.SearchBean;
 

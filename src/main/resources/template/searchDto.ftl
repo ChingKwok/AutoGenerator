@@ -1,10 +1,10 @@
-package ${project.packageName}.bean.dto;
+package ${project.packageName}.${project.projectCode}.bean.dto;
 
-<#list table.columns as column>
-    <#if (column.typeCode >= 91 ) && (column.typeCode <= 93 ) >
-        import java.util.Date;
-    <#elseif column.typeCode == 3 >
-        import java.math.BigDecimal;
+<#list table.columnSet as columnSet>
+    <#if columnSet == "Data"  >
+import java.util.Date;
+    <#elseif columnSet == "BigDecimal">
+import java.math.BigDecimal;
     </#if>
 </#list>
 import com.common.entity.SearchBean;

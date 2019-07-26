@@ -1,14 +1,15 @@
-package ${project.packageName}.bean.entity;
+package ${project.packageName}.${project.projectCode}.bean.entity;
 
-<#list table.columns as column>
-    <#if (column.typeCode >= 91 ) && (column.typeCode <= 93 ) >
+<#--check import-->
+<#list table.columnSet as columnSet>
+<#if columnSet == "Date"  >
 import java.util.Date;
-    <#elseif column.typeCode == 3 >
+<#elseif columnSet == "BigDecimal">
 import java.math.BigDecimal;
-    </#if>
+</#if>
 </#list>
 import lombok.Data;
-import ${project.packageName}.common.bean.BaseEntity;
+import ${project.packageName}.${project.projectCode}.common.bean.BaseEntity;
 
 <#if (table.tableComment)?exists>
 /**
@@ -21,6 +22,7 @@ public class ${table.entityName} extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 <#list table.columns as column>
+<#if column.isBase == false>
     <#if (column.comment)?exists>
     /**
     *   ${(column.comment)!""}
@@ -28,6 +30,7 @@ public class ${table.entityName} extends BaseEntity {
     </#if>
     private ${column.javaType} ${column.property};
 
+</#if>
 </#list>
 
 }

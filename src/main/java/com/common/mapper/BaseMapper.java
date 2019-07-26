@@ -1,6 +1,5 @@
 package com.common.mapper;
 
-import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import tk.mybatis.mapper.common.Mapper;
@@ -22,27 +21,33 @@ public interface BaseMapper<T> extends Mapper<T> {
     )
     int insertList(List<T> var1);
 
-    @InsertProvider(
-            type = BaseMapperProvider.class,
-            method = "dynamicSQL"
-    )
-    int insertListSelective(List<T> var1);
-
+//    @InsertProvider(
+//            type = BaseMapperProvider.class,
+//            method = "dynamicSQL"
+//    )
+//    int insertListSelective(List<T> var1);
+//
     @UpdateProvider(
             type = BaseMapperProvider.class,
             method = "dynamicSQL"
     )
     int updateList(List<T> var1);
-
-    @UpdateProvider(
-            type = BaseMapperProvider.class,
-            method = "dynamicSQL"
-    )
-    int updateListNecessary(List<T> var1);
-
-    @DeleteProvider(
-            type = BaseMapperProvider.class,
-            method = "dynamicSQL"
-    )
-    int deleteList(List<T> var1);
+//
+//    @UpdateProvider(
+//            type = BaseMapperProvider.class,
+//            method = "dynamicSQL"
+//    )
+//    int updateListNecessary(List<T> var1);
+//
+//    @UpdateProvider(
+//            type = BaseMapperProvider.class,
+//            method = "dynamicSQL"
+//    )
+//    int updateSelectionByPrimaryKey(@Param("record") T var1, @Param("primaryIdList") List<Long> var2);
+//
+//    @DeleteProvider(
+//            type = BaseMapperProvider.class,
+//            method = "dynamicSQL"
+//    )
+//    int deleteList(List<T> var1);
 }

@@ -1,4 +1,4 @@
-package com.common.component;
+package com.chingkwok.utils.interfaceFun;
 
 /**
  * Created by guojingye on 2019/7/18

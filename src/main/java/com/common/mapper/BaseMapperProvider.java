@@ -41,4 +41,43 @@ public class BaseMapperProvider extends MapperTemplate {
         return sql.toString();
     }
 
+    public String updateList(MappedStatement ms) {
+        Class<?> entityClass = this.getEntityClass(ms);
+        StringBuilder sql = new StringBuilder();
+        sql.append(SqlHelper.insertIntoTable(entityClass, this.tableName(entityClass)));
+        sql.append(SqlHelper.insertColumns(entityClass, false, false, false));
+        sql.append(" VALUES ");
+        sql.append("<foreach collection=\"list\" item=\"record\" separator=\",\">");
+        sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+        Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
+        Iterator var5 = columnList.iterator();
+
+        EntityColumn column;
+        while(var5.hasNext()) {
+            column = (EntityColumn)var5.next();
+            if (column.isInsertable()) {
+                sql.append(column.getColumnHolder("record", "", ","));
+            }
+        }
+
+        sql.append("</trim>");
+        sql.append("</foreach>");
+        sql.append(" ON DUPLICATE KEY UPDATE ");
+        var5 = columnList.iterator();
+
+        while(var5.hasNext()) {
+            column = (EntityColumn)var5.next();
+            if (column.isInsertable()) {
+                sql.append(column.getColumn());
+                sql.append("=VALUES(");
+                sql.append(column.getColumn());
+                sql.append("),");
+            }
+        }
+
+        sql.deleteCharAt(sql.length() - 1);
+        return sql.toString();
+    }
+
+
 }

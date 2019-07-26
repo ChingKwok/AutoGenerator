@@ -1,12 +1,13 @@
 package com.common.service.Impl;
 
 import com.chingkwok.bean.entity.User;
-import com.chingkwok.component.SnowflakeIdWorker;
+import com.chingkwok.utils.SnowflakeIdWorker;
 import com.chingkwok.utils.ConvertUtils;
 import com.chingkwok.utils.PagedResult;
 import com.chingkwok.utils.ParseUtils;
+import com.chingkwok.utils.interfaceFun.FieldFunction;
 import com.chingkwok.utils.interfaceFun.PagedResultHandler;
-import com.common.component.KeySettable;
+import com.chingkwok.utils.interfaceFun.KeySettable;
 import com.common.entity.SearchBean;
 import com.common.mapper.BaseMapper;
 import com.common.service.BaseService;
@@ -221,6 +222,27 @@ public abstract class BaseServerImpl<T extends BaseEntity> implements BaseServic
         User principal = getLoginUser();
         record.setDeleterUserId(principal.getUserId().toString());
         record.setDeletionTime(new Date());
+    }
+
+    public static <S, T> T convert(S source, Class<T> tClass) {
+        return ConvertUtils.convert(source,tClass);
+    }
+
+    public static <S, T> T convert(S source, Class<T> tClass, FieldFunction<T> f) {
+        return ConvertUtils.convert(source,tClass,f);
+    }
+
+
+    public static <S, T> List<T> convertList(List<S> sources, Class<T> tClass) {
+        return ConvertUtils.convertList(sources, tClass, null);
+    }
+
+    public static <S, T> List<T> convertList(List<S> sources, Class<T> tClass, FieldFunction<T> f) {
+        return ConvertUtils.convertList(sources,tClass,f);
+    }
+
+    public static <S> Map<String, Object> convertMap(S source) {
+        return ConvertUtils.convertMap(source);
     }
 
 }
