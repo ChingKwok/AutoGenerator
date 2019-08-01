@@ -46,12 +46,12 @@ public class ConvertUtils {
         return map;
     }
 
-    public static <S, T> PagedResult<T> convertPagedResult(PagedResult<S> pagedResult, Class<T> tClass, FieldFunction<T> fieldFunction) {
-        return new PagedResult<T>(convertList(pagedResult.getRows(), tClass, fieldFunction), pagedResult.getTotalCount());
-    }
-
     public static <S, T> PagedResult<T> convertPagedResult(PagedResult<S> pagedResult, Class<T> tClass) {
-        return new PagedResult<T>(convertList(pagedResult.getRows(), tClass, null), pagedResult.getTotalCount());
+        return new PagedResult<>(convertList(pagedResult.getRows(), tClass, null), pagedResult.getTotalCount());
     }
-}
 
+    public static <S, T> PagedResult<T> convertPagedResult(PagedResult<S> pagedResult, Class<T> tClass, FieldFunction<T> fieldFunction) {
+        return new PagedResult<>(convertList(pagedResult.getRows(), tClass, fieldFunction), pagedResult.getTotalCount());
+    }
+
+}
